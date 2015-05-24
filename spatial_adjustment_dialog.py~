@@ -140,6 +140,6 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         gcpCSV.close()
         #for m in gcpList:
         #    csv.writerow()
-        self.cleanSelection()
+        
         processing.runalg('grass:v.transform.pointsfile','/home/daniele/Scrivania/catasto_prova/sgp_catasto/strade.shp','gcp.csv',None,None,None,None,None,None)
         os.remove(filepath)
