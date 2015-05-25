@@ -38,8 +38,8 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
     vLayer = ""
     srcList = []
     dstList = []
-    markerListMapPreview = []
-    markerListCanvas = []
+    markerListMP = []
+    markerListMC = []
     def __init__(self, iface, parent=None):
         """Constructor."""
         super(SpatialAdjustmentDialog, self).__init__(parent)
@@ -54,6 +54,7 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
         QObject.connect(self.removeLayerBtn, SIGNAL("clicked()"), self.removeLayer)
         QObject.connect(self.addGCPBtn, SIGNAL("clicked()"), self.addGCP)
+        QObject.connect(self.cleanSelBtn, SIGNAL("clicked()"), self.cleanSel)
         QObject.connect(self.run, SIGNAL("clicked()"), self.runAdjust)
         #creao il mapcavas
         self.mapPreview = QgsMapCanvas(self)
@@ -101,7 +102,8 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
 
     def clickMapPreview(self, point, button):
         QMessageBox.information(None, 'info', str(point.x())+', '+str(point.y()) )
-        self.addPnt(self.mapPreview,point)
+        markerMapPreview = self.addPnt(self.mapPreview,point)
+        self.markerListMP.append(markerMapPreview)
         self.srcList.append([point.x(),point.y()])
         print self.srcList
         self.clickTool1.canvasClicked.disconnect()
@@ -112,10 +114,30 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
 
     def clickMapCanvas(self, point, button):
         QMessageBox.information(None, 'info', str(point.x())+', '+str(point.y()))
-        self.addPnt(self.canvas,point)
+        markerMapCanvas = self.addPnt(self.canvas,point)
+        self.markerListMC.append(markerMapCanvas)
         self.dstList.append([point.x(),point.y()])
         self.clickTool2.canvasClicked.disconnect()
         self.canvas.unsetMapTool(self.clickTool2)
+        nRow = self.tableWidget.rowCount()
+        self.tableWidget.insertRow(nRow)
+        self.tableWidget.setItem(nRow,'1',[point.x(),point.y()])
+
+    def cleanSel(self):
+        """
+            Pulisce lo stack dei selezionati e toglie i marker;
+        """
+        # elimina i marcatori
+        for m in self.markerListMC:
+            self.canvas.scene().removeItem(m)
+            print m
+        self.markerListMC = []
+        for m in self.markerListMP:
+            self.mapPreview.scene().removeItem(m)
+        self.markerListMP = []
+        # rinfresca il video
+        self.canvas.refresh()
+        self.mapPreview.refresh()
 
     def addGCP(self):
         if (self.vLayer != ""):
@@ -140,6 +162,5 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         gcpCSV.close()
         #for m in gcpList:
         #    csv.writerow()
-        
         processing.runalg('grass:v.transform.pointsfile','/home/daniele/Scrivania/catasto_prova/sgp_catasto/strade.shp','gcp.csv',None,None,None,None,None,None)
         os.remove(filepath)

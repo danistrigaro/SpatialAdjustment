@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>770</width>
+    <width>771</width>
     <height>662</height>
    </rect>
   </property>
@@ -105,6 +105,13 @@
      <widget class="QToolButton" name="removeLayerBtn">
       <property name="text">
        <string>r</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="cleanSelBtn">
+      <property name="text">
+       <string>C</string>
       </property>
      </widget>
     </item>
