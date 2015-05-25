@@ -213,7 +213,8 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
             out = processing.runalg('grass:v.transform.pointsfile',self.pname,filepath,None,None,None,None,0,None)
             print str(out['output'])
             self.vLayerOut = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
+            os.remove(filepath)
         else:
             QMessageBox.information(None, 'info', "Add at least 4 control points" )
-        #os.remove(filepath)
+        #
 

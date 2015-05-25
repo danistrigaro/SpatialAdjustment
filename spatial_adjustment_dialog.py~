@@ -175,10 +175,10 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         data = []
         for r in range(nRow):
             riga = []
-        for c in range(nCol-1):
-            item = self.tableWidget.item(r,c+1)
-            print item.text()
-            riga.append(item.text())
+            for c in range(nCol-1):
+                item = self.tableWidget.item(r,c+1)
+                print item.text()
+                riga.append(item.text())
             data.append(riga)
         return data
 
