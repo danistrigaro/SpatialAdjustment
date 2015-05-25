@@ -102,10 +102,35 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
 
     def clickMapPreview(self, point, button):
         QMessageBox.information(None, 'info', str(point.x())+', '+str(point.y()) )
+        """
+        prova codice per snap
+
+        # trasforma in screen coordinates
+        newPoint = self.mapPreview.getCoordinateTransform().transform(point)
+        # .. e in QPoint 
+        pnt = QPoint(newPoint.x(),newPoint.y())
+        # attiva lo snapper
+        mySnapper = QgsMapCanvasSnapper(self.mapPreview)
+        (reval, snapped) = mySnapper.snapToBackgroundLayers(pnt)
+        if snapped != []:
+            print "ok"
+        else:
+            print 'no'
+        """
         markerMapPreview = self.addPnt(self.mapPreview,point)
         self.markerListMP.append(markerMapPreview)
         self.srcList.append([point.x(),point.y()])
-        print self.srcList
+        nRow = self.tableWidget.rowCount()
+        self.tableWidget.insertRow(nRow)
+        checkItem = QTableWidgetItem()
+        checkItem.setFlags(Qt.ItemIsUserCheckable |
+                           Qt.ItemIsEnabled)
+        checkItem.setCheckState(Qt.Checked)
+        self.tableWidget.setItem(nRow,0, checkItem)        
+        self.tableWidget.setItem(nRow,1, QTableWidgetItem(str(point.x())))        
+        self.tableWidget.setItem(nRow,2, QTableWidgetItem(str(point.y())))
+
+
         self.clickTool1.canvasClicked.disconnect()
         self.mapPreview.unsetMapTool(self.clickTool1)
         self.clickTool2 = QgsMapToolEmitPoint(self.canvas)
@@ -120,8 +145,8 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         self.clickTool2.canvasClicked.disconnect()
         self.canvas.unsetMapTool(self.clickTool2)
         nRow = self.tableWidget.rowCount()
-        self.tableWidget.insertRow(nRow)
-        self.tableWidget.setItem(nRow,1,[point.x(),point.y()])
+        self.tableWidget.setItem(nRow-1,3, QTableWidgetItem(str(point.x())))        
+        self.tableWidget.setItem(nRow-1,4, QTableWidgetItem(str(point.y())))
 
     def cleanSel(self):
         """
@@ -134,10 +159,28 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         self.markerListMC = []
         for m in self.markerListMP:
             self.mapPreview.scene().removeItem(m)
+        self.tableWidget.clear()
+        self.tableWidget.setRowCount(0)
         self.markerListMP = []
         # rinfresca il video
         self.canvas.refresh()
         self.mapPreview.refresh()
+
+    def getValues(self):
+        """
+            get the table values
+        """
+        nRow = self.tableWidget.rowCount()
+        nCol = self.tableWidget.columnCount()
+        data = []
+        for r in range(nRow):
+            riga = []
+        for c in range(nCol):
+            item = self.tableWidget.item(r,c)
+            print item.text()
+            riga.append(item.text())
+        data.append(riga)
+        return data
 
     def addGCP(self):
         if (self.vLayer != ""):
@@ -150,17 +193,22 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
 
     #spatial adjustment function
     def runAdjust(self):
-        QMessageBox.information(None, 'info', "running" )
+        #QMessageBox.information(, 'info', "running" )
         basepath = os.path.dirname(__file__)
-        filepath = os.path.abspath(os.path.join(basepath, os.urandom(10)+".csv"))
+        idCsv = 'sad'
+        filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
+        data = self.getValues()
         with open(filepath, "w") as gcpCSV:
             writer = csv.writer(gcpCSV, delimiter=' ')
             i = 0
-            for r in self.srcList:
-                writer.writerow(r + self.dstList[i])
+            for r in data:
+                writer.writerow(r)
                 i = i+1
         gcpCSV.close()
         #for m in gcpList:
         #    csv.writerow()
-        processing.runalg('grass:v.transform.pointsfile','/home/daniele/Scrivania/catasto_prova/sgp_catasto/strade.shp','gcp.csv',None,None,None,None,None,None)
+        out = processing.runalg('grass:v.transform.pointsfile',self.vLayer,filepath,None,None,None,None,0,'prova.shp')
+        print str(out['output'])
+        self.vLayer = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
         os.remove(filepath)
+
