@@ -64,10 +64,10 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
     #function to add layer
     def loadLayer(self):
         if (self.vLayer == ""):
-            pname = QFileDialog.getOpenFileName(None,'Open file',os.path.expanduser('~'),'*.shp')
-            if pname:
-                fname = pname.split('/')
-                self.vLayer = QgsVectorLayer(pname, fname[-1] + '_adjust', "ogr")
+            self.pname = QFileDialog.getOpenFileName(None,'Open file',os.path.expanduser('~'),'*.shp')
+            if self.pname:
+                fname = self.pname.split('/')
+                self.vLayer = QgsVectorLayer(self.pname, fname[-1] + '_adjust', "ogr")
                 print "aperto layer",fname[-1]
                 layerToSet = []
                 QgsMapLayerRegistry.instance().addMapLayers([self.vLayer], False)
@@ -175,11 +175,11 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         data = []
         for r in range(nRow):
             riga = []
-        for c in range(nCol):
-            item = self.tableWidget.item(r,c)
+        for c in range(nCol-1):
+            item = self.tableWidget.item(r,c+1)
             print item.text()
             riga.append(item.text())
-        data.append(riga)
+            data.append(riga)
         return data
 
     def addGCP(self):
@@ -193,22 +193,27 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
 
     #spatial adjustment function
     def runAdjust(self):
-        #QMessageBox.information(, 'info', "running" )
-        basepath = os.path.dirname(__file__)
-        idCsv = 'sad'
-        filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
-        data = self.getValues()
-        with open(filepath, "w") as gcpCSV:
-            writer = csv.writer(gcpCSV, delimiter=' ')
-            i = 0
-            for r in data:
-                writer.writerow(r)
-                i = i+1
-        gcpCSV.close()
-        #for m in gcpList:
-        #    csv.writerow()
-        out = processing.runalg('grass:v.transform.pointsfile',self.vLayer,filepath,None,None,None,None,0,'prova.shp)
-        print str(out['output'])
-        self.vLayer = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
-        os.remove(filepath)
+        nRow = self.tableWidget.rowCount()
+        if (nRow >= 4):
+            #QMessageBox.information(, 'info', "running" )
+            basepath = os.path.dirname(__file__)
+            idCsv = 'sad'
+            filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
+            data = self.getValues()
+            with open(filepath, "w") as gcpCSV:
+                writer = csv.writer(gcpCSV, delimiter=' ')
+                i = 0
+                for r in data:
+                    writer.writerow(r)
+                    i = i+1
+            gcpCSV.close()
+            #for m in gcpList:
+            #    csv.writerow()
+            print self.pname
+            out = processing.runalg('grass:v.transform.pointsfile',self.pname,filepath,None,None,None,None,0,None)
+            print str(out['output'])
+            self.vLayerOut = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
+        else:
+            QMessageBox.information(None, 'info', "Add at least 4 control points" )
+        #os.remove(filepath)
 
