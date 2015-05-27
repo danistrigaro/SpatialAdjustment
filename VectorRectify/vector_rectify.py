@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- SpatialAdjustment
+ Vector Rectify
                                  A QGIS plugin
  A tool to adjust vector layers
                               -------------------
         begin                : 2015-05-21
         git sha              : $Format:%H$
-        copyright            : (C) 2015 by Daniele Strigaro
-        email                : daniele.strigaro@gmail.com
+        copyright            : (C) 2015 by Giuliano Curti, Daniele Strigaro
+        email                : giulianc51@gmail.com, daniele.strigaro@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,16 +22,14 @@
 """
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-# Initialize Qt resources from file resources.py
-import resources_rc
 # Import the code for the dialog
-from spatial_adjustment_dialog import SpatialAdjustmentDialog
+from .vector_rectify_dialog import VectorRectifyDialog
 import os.path
 
 from qgis.gui import *
 
 
-class SpatialAdjustment:
+class VectorRectify:
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface):
@@ -48,27 +46,27 @@ class SpatialAdjustment:
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
-        locale_path = os.path.join(
-            self.plugin_dir,
-            'i18n',
-            'SpatialAdjustment_{}.qm'.format(locale))
+        #locale_path = os.path.join(
+        #    self.plugin_dir,
+        #    'i18n',
+        #    'SpatialAdjustment_{}.qm'.format(locale))
 
-        if os.path.exists(locale_path):
-            self.translator = QTranslator()
-            self.translator.load(locale_path)
+        #if os.path.exists(locale_path):
+        #    self.translator = QTranslator()
+        #    self.translator.load(locale_path)
 
-            if qVersion() > '4.3.3':
-                QCoreApplication.installTranslator(self.translator)
+        #    if qVersion() > '4.3.3':
+        #        QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        self.dlg = SpatialAdjustmentDialog(self.iface)
+        self.dlg = VectorRectifyDialog(self.iface)
 
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&Spatial Adjustment')
         # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.addToolBar(u'SpatialAdjustment')
-        self.toolbar.setObjectName(u'SpatialAdjustment')
+        self.toolbar = self.iface.addToolBar(u'Vector Rectify')
+        self.toolbar.setObjectName(u'Vector Rectify')
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -83,7 +81,7 @@ class SpatialAdjustment:
         :rtype: QString
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-        return QCoreApplication.translate('SpatialAdjustment', message)
+        return QCoreApplication.translate('VectorRectify', message)
 
 
     def add_action(
@@ -136,7 +134,7 @@ class SpatialAdjustment:
         :rtype: QAction
         """
 
-        icon = QIcon(icon_path)
+        icon = QIcon(os.path.join(os.path.dirname(__file__),'icons','icon.svg'))
         action = QAction(icon, text, parent)
         action.triggered.connect(callback)
         action.setEnabled(enabled_flag)
@@ -162,10 +160,10 @@ class SpatialAdjustment:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/SpatialAdjustment/icon.png'
+        icon_path = ':/plugins/VectorRectify/icons/icon.png'
         self.add_action(
             icon_path,
-            text=self.tr(u'Vector adjustment'),
+            text=self.tr(u'Vector Rectify'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
@@ -173,7 +171,7 @@ class SpatialAdjustment:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&Spatial Adjustment'),
+                self.tr(u'&Vector Rectify'),
                 action)
             self.iface.removeToolBarIcon(action)
         # remove the toolbar

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SpatialAdjustmentDialogBase</class>
- <widget class="QDialog" name="SpatialAdjustmentDialogBase">
+ <class>VectorRectifyDialogBase</class>
+ <widget class="QDialog" name="VectorRectifyDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Spatial Adjustment</string>
+   <string>Vector Rectify</string>
   </property>
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
@@ -19,7 +19,7 @@
      <x>290</x>
      <y>630</y>
      <width>341</width>
-     <height>32</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="orientation">
@@ -80,38 +80,32 @@
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>9</y>
-     <width>751</width>
+     <x>140</x>
+     <y>10</y>
+     <width>91</width>
      <height>41</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QToolButton" name="addGCPBtn">
-      <property name="text">
-       <string>P</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QToolButton" name="loadLayerBtn">
       <property name="text">
-       <string>a</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/addVect.svg</normaloff>icons/addVect.svg</iconset>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QToolButton" name="removeLayerBtn">
       <property name="text">
-       <string>r</string>
+       <string/>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QToolButton" name="cleanSelBtn">
-      <property name="text">
-       <string>C</string>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/rmVect.svg</normaloff>icons/rmVect.svg</iconset>
       </property>
      </widget>
     </item>
@@ -130,13 +124,89 @@
     <string>Run</string>
    </property>
   </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>10</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QToolButton" name="addGCPBtn">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/gcp.svg</normaloff>icons/gcp.svg</iconset>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="cleanSelBtn">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/rmGCP.svg</normaloff>icons/rmGCP.svg</iconset>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>131</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add/remove layer:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>20</y>
+     <width>191</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add/remove GCP:</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="zoomInBtn">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>20</y>
+     <width>23</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>...</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>SpatialAdjustmentDialogBase</receiver>
+   <receiver>VectorRectifyDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -152,7 +222,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>SpatialAdjustmentDialogBase</receiver>
+   <receiver>VectorRectifyDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

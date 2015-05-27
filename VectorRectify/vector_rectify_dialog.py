@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- SpatialAdjustmentDialog
+ Vector Rectify
                                  A QGIS plugin
  A tool to adjust vector layers
-                             -------------------
+                              -------------------
         begin                : 2015-05-21
         git sha              : $Format:%H$
-        copyright            : (C) 2015 by Daniele Strigaro
-        email                : daniele.strigaro@gmail.com
+        copyright            : (C) 2015 by Giuliano Curti, Daniele Strigaro
+        email                : giulianc51@gmail.com, daniele.strigaro@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,10 +31,10 @@ import processing
 import csv
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'spatial_adjustment_dialog_base.ui'))
+    os.path.dirname(__file__), 'vector_rectify_dialog_base.ui'))
 
 
-class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
+class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
     vLayer = ""
     srcList = []
     dstList = []
@@ -42,7 +42,7 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
     markerListMC = []
     def __init__(self, iface, parent=None):
         """Constructor."""
-        super(SpatialAdjustmentDialog, self).__init__(parent)
+        super(VectorRectifyDialog, self).__init__(parent)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
@@ -50,17 +50,32 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         self.canvas = iface.mapCanvas()
+        #setto icnone
+        self.loadLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','addVect.svg')))
+        self.removeLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmVect.svg')))
+        self.addGCPBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','gcp.svg')))
+        self.cleanSelBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmGCP.svg')))
         #attacco funzioni ai bottoni
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
         QObject.connect(self.removeLayerBtn, SIGNAL("clicked()"), self.removeLayer)
         QObject.connect(self.addGCPBtn, SIGNAL("clicked()"), self.addGCP)
         QObject.connect(self.cleanSelBtn, SIGNAL("clicked()"), self.cleanSel)
         QObject.connect(self.run, SIGNAL("clicked()"), self.runAdjust)
-        #creao il mapcavas
+        QObject.connect(self.zoomInBtn, SIGNAL("clicked()"), self.zoomIn)
+        # creao il mapcavas
         self.mapPreview = QgsMapCanvas(self)
         self.tabWidget.addTab(self.mapPreview, "Map Canvas")
-
+        # set mapPreview tools
+        self.toolZoomIn = QgsMapToolZoom(self.mapPreview, False)
     #personal function
+    def zoomIn(self):
+        if (self.zoomInBtn.isChecked()):
+            self.mapPreview.setMapTool(self.toolZoomIn)
+            print 'set zoomIn'
+        else:
+            print 'unset zoomIn'
+            self.mapPreview.unsetMapTool(self.toolZoomIn)
+
     #function to add layer
     def loadLayer(self):
         if (self.vLayer == ""):
@@ -161,6 +176,7 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
             self.mapPreview.scene().removeItem(m)
         self.tableWidget.clear()
         self.tableWidget.setRowCount(0)
+        self.tableWidget.setHorizontalHeaderLabels(['on/off', 'source x', 'source y', 'destination x', 'destination y'])
         self.markerListMP = []
         # rinfresca il video
         self.canvas.refresh()
@@ -175,11 +191,12 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
         data = []
         for r in range(nRow):
             riga = []
-            for c in range(nCol-1):
-                item = self.tableWidget.item(r,c+1)
-                print item.text()
-                riga.append(item.text())
-            data.append(riga)
+            if (self.tableWidget.item(r,0).checkState() == Qt.Checked):
+                for c in range(nCol-1):
+                    item = self.tableWidget.item(r,c+1)
+                    print item.text()
+                    riga.append(item.text())
+                data.append(riga)
         return data
 
     def addGCP(self):
@@ -195,26 +212,28 @@ class SpatialAdjustmentDialog(QtGui.QDialog, FORM_CLASS):
     def runAdjust(self):
         nRow = self.tableWidget.rowCount()
         if (nRow >= 4):
-            #QMessageBox.information(, 'info', "running" )
-            basepath = os.path.dirname(__file__)
-            idCsv = 'sad'
-            filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
             data = self.getValues()
-            with open(filepath, "w") as gcpCSV:
-                writer = csv.writer(gcpCSV, delimiter=' ')
-                i = 0
-                for r in data:
-                    writer.writerow(r)
-                    i = i+1
-            gcpCSV.close()
-            #for m in gcpList:
-            #    csv.writerow()
-            print self.pname
-            out = processing.runalg('grass:v.transform.pointsfile',self.pname,filepath,None,None,None,None,0,None)
-            print str(out['output'])
-            self.vLayerOut = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
-            os.remove(filepath)
+            if (len(data) >= 4):
+                basepath = os.path.dirname(__file__)
+                idCsv = 'sad'
+                filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
+                with open(filepath, "w") as gcpCSV:
+                    writer = csv.writer(gcpCSV, delimiter=' ')
+                    i = 0
+                    for r in data:
+                        writer.writerow(r)
+                        i = i+1
+                gcpCSV.close()
+                #for m in gcpList:
+                #    csv.writerow()
+                print self.pname
+                out = processing.runalg('grass:v.transform.pointsfile',self.pname,filepath,None,None,None,None,0,None)
+                print str(out['output'])
+                self.vLayerOut = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
+                os.remove(filepath)
+            else:
+                QMessageBox.information(None, 'info', "Check at least 4 ground control points" )  
         else:
-            QMessageBox.information(None, 'info', "Add at least 4 control points" )
+            QMessageBox.information(None, 'info', "Add at least 4 ground control points" )
         #
 

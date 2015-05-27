@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="34.03125"
+   height="35.875"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   inkscape:export-filename="C:\Users\Windows\Github\vector_georeferencer_plugin\vectGeoref\icon.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
+   sodipodi:docname="icon.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3846">
+      <stop
+         style="stop-color:#ff0815;stop-opacity:1;"
+         offset="0"
+         id="stop3848" />
+      <stop
+         style="stop-color:#a0a0a0;stop-opacity:0;"
+         offset="1"
+         id="stop3850" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="21.92031"
+     inkscape:cy="15.341224"
+     inkscape:document-units="px"
+     inkscape:current-layer="g3856"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="746"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-254.03125,-254.3125)">
+    <path
+       style="fill:#a0a0a0;stroke:none"
+       d=""
+       id="path3840"
+       inkscape:connector-curvature="0"
+       transform="translate(254.21431,254.64789)" />
+    <g
+       id="g3856"
+       inkscape:export-filename="C:\Users\Windows\Github\vector-georeferencer-plugin\vectGeoref\icon.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <rect
+         style="fill:#999999;fill-opacity:1;fill-rule:evenodd;stroke:none"
+         id="rect3043"
+         width="33.31086"
+         height="35.230003"
+         x="254.44249"
+         y="254.54625"
+         ry="3.1594849"
+         rx="3.1594849" />
+      <path
+         style="fill:#ffffff;fill-opacity:0.71759261;fill-rule:evenodd;stroke:#000000;stroke-width:0.70000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         d="m 278.13492,279.22943 0,3.48733 -6.12693,0 0,5.65627 7.99905,0 0,-3.4448 6.16948,0 0,-5.6988 -8.0416,0 z"
+         id="rect3978"
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="C:\Users\Windows\Github\vector-georeferencer-plugin\vectGeoref\icon.png"
+         inkscape:export-xdpi="300"
+         inkscape:export-ydpi="300" />
+      <path
+         style="fill:#a0a0a0;stroke:none"
+         d=""
+         id="path4015"
+         inkscape:connector-curvature="0"
+         transform="translate(254.34375,254.65625)" />
+      <path
+         style="fill:#a0a0a0;stroke:none"
+         d=""
+         id="path4017"
+         inkscape:connector-curvature="0"
+         transform="translate(254.34375,254.65625)" />
+      <path
+         inkscape:export-ydpi="300"
+         inkscape:export-xdpi="300"
+         inkscape:export-filename="C:\Users\Windows\Github\vector-georeferencer-plugin\vectGeoref\icon.png"
+         inkscape:connector-curvature="0"
+         id="path3037"
+         d="M 272.04003,288.32069 257.57354,267.31703"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         sodipodi:nodetypes="cc" />
+      <path
+         sodipodi:nodetypes="cc"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 286.22798,279.13623 c 0,0 -10.82524,-12.09167 -16.91516,-18.05469"
+         id="path3039"
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="C:\Users\Windows\Github\vector-georeferencer-plugin\vectGeoref\icon.png"
+         inkscape:export-xdpi="300"
+         inkscape:export-ydpi="300" />
+      <path
+         inkscape:export-ydpi="300"
+         inkscape:export-xdpi="300"
+         inkscape:export-filename="C:\Users\Windows\Github\vector-georeferencer-plugin\vectGeoref\icon.png"
+         inkscape:connector-curvature="0"
+         id="path3041"
+         d="m 262.67929,261.09603 0,2.42797 -5.13273,0 0,3.93804 6.70108,0 0,-2.39836 5.16838,0 0,-3.96765 -6.73673,0 z"
+         style="fill:#ffffff;fill-opacity:0.71759261;fill-rule:evenodd;stroke:#000000;stroke-width:0.70000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <path
+         style="fill:none;stroke:#626262;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 3.0843388,1.3989466 c 0,0 15.0789642,0.057117 22.6184852,0.068541 2.478307,0.078193 3.243093,-0.049236 4.487664,0.4402023 0.788807,0.310205 1.440532,0.8260325 1.612471,1.9587279 0.401589,2.0209544 0.222142,1.7789001 0.274165,2.6730936 0.283994,4.8814748 0.331404,8.8724388 0.205622,14.6677448"
+         id="path3045"
+         inkscape:connector-curvature="0"
+         transform="translate(254.03125,254.3125)"
+         sodipodi:nodetypes="ccscac" />
+      <path
+         inkscape:export-ydpi="300"
+         inkscape:export-xdpi="300"
+         inkscape:export-filename="C:\Users\Windows\Github\vector-georeferencer-plugin\vectGeoref\icon.png"
+         inkscape:connector-curvature="0"
+         id="path3815"
+         d="m 277.83249,282.63435 c 0,0 -9.17158,-13.55452 -15.2615,-19.51754"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         sodipodi:nodetypes="cc" />
+    </g>
+  </g>
+</svg>
