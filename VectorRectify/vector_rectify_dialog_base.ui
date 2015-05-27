@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>771</width>
-    <height>662</height>
+    <height>661</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>420</x>
      <y>630</y>
      <width>341</width>
      <height>30</height>
@@ -26,7 +26,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel</set>
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
    </property>
   </widget>
   <widget class="QTabWidget" name="tabWidget">
@@ -82,7 +82,7 @@
     <rect>
      <x>140</x>
      <y>10</y>
-     <width>91</width>
+     <width>101</width>
      <height>41</height>
     </rect>
    </property>
@@ -90,39 +90,38 @@
     <item>
      <widget class="QToolButton" name="loadLayerBtn">
       <property name="text">
-       <string/>
+       <string>Add layer</string>
       </property>
       <property name="icon">
        <iconset>
         <normaloff>icons/addVect.svg</normaloff>icons/addVect.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QToolButton" name="removeLayerBtn">
       <property name="text">
-       <string/>
+       <string>Remove layer</string>
       </property>
       <property name="icon">
        <iconset>
         <normaloff>icons/rmVect.svg</normaloff>icons/rmVect.svg</iconset>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QPushButton" name="run">
-   <property name="geometry">
-    <rect>
-     <x>650</x>
-     <y>630</y>
-     <width>98</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Run</string>
-   </property>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
@@ -137,22 +136,34 @@
     <item>
      <widget class="QToolButton" name="addGCPBtn">
       <property name="text">
-       <string/>
+       <string>Add GCP</string>
       </property>
       <property name="icon">
        <iconset>
         <normaloff>icons/gcp.svg</normaloff>icons/gcp.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QToolButton" name="cleanSelBtn">
       <property name="text">
-       <string/>
+       <string>Remove GCP</string>
       </property>
       <property name="icon">
        <iconset>
         <normaloff>icons/rmGCP.svg</normaloff>icons/rmGCP.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
     </item>
@@ -176,7 +187,7 @@
     <rect>
      <x>260</x>
      <y>20</y>
-     <width>191</width>
+     <width>121</width>
      <height>17</height>
     </rect>
    </property>
@@ -184,21 +195,37 @@
     <string>Add/remove GCP:</string>
    </property>
   </widget>
-  <widget class="QToolButton" name="zoomInBtn">
+  <widget class="QWidget" name="horizontalLayoutWidget_3">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>20</y>
-     <width>23</width>
-     <height>25</height>
+     <x>650</x>
+     <y>10</y>
+     <width>71</width>
+     <height>41</height>
     </rect>
    </property>
-   <property name="text">
-    <string>...</string>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QToolButton" name="zoomInBtn">
+      <property name="text">
+       <string>Zoom in</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/mActionZoomIn.svg</normaloff>icons/mActionZoomIn.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

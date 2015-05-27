@@ -55,12 +55,14 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.removeLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmVect.svg')))
         self.addGCPBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','gcp.svg')))
         self.cleanSelBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmGCP.svg')))
+        self.zoomInBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomIn.svg')))
+
         #attacco funzioni ai bottoni
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
         QObject.connect(self.removeLayerBtn, SIGNAL("clicked()"), self.removeLayer)
         QObject.connect(self.addGCPBtn, SIGNAL("clicked()"), self.addGCP)
         QObject.connect(self.cleanSelBtn, SIGNAL("clicked()"), self.cleanSel)
-        QObject.connect(self.run, SIGNAL("clicked()"), self.runAdjust)
+        #QObject.connect(self.run, SIGNAL("clicked()"), self.runAdjust)
         QObject.connect(self.zoomInBtn, SIGNAL("clicked()"), self.zoomIn)
         # creao il mapcavas
         self.mapPreview = QgsMapCanvas(self)
@@ -230,6 +232,10 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 out = processing.runalg('grass:v.transform.pointsfile',self.pname,filepath,None,None,None,None,0,None)
                 print str(out['output'])
                 self.vLayerOut = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
+                render = self.canvas.mapRenderer()
+                curCrs = render.destinationCrs()
+                QgsMapLayerRegistry.instance().addMapLayers([self.vLayerOut])
+                self.canvas.zoomToFullExtent()
                 os.remove(filepath)
             else:
                 QMessageBox.information(None, 'info', "Check at least 4 ground control points" )  

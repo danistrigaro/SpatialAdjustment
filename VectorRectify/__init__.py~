@@ -31,5 +31,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .spatial_adjustment import SpatialAdjustment
-    return SpatialAdjustment(iface)
+    from .VectorRectify.vector_rectify import VectorRectify
+    return VectorRectify(iface)

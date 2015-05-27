@@ -27,6 +27,7 @@ from .vector_rectify_dialog import VectorRectifyDialog
 import os.path
 
 from qgis.gui import *
+import qgis.utils
 
 
 class VectorRectify:
@@ -192,7 +193,9 @@ class VectorRectify:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            QMessageBox.information(None, 'info', "Please insert a layer" )
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
+            self.dlg.runAdjust()
             pass
+        else:
+            qgis.utils.reloadPlugin('VectorRectify')
