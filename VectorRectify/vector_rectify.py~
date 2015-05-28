@@ -199,5 +199,3 @@ class VectorRectify:
             pass
         else:
             qgis.utils.reloadPlugin('VectorRectify')
-#            qgis.utils.loadPlugin('VectorRectify')
-#            qgis.utils.startPlugin('VectorRectify')

@@ -128,7 +128,7 @@
     <rect>
      <x>390</x>
      <y>10</y>
-     <width>91</width>
+     <width>97</width>
      <height>41</height>
     </rect>
    </property>
@@ -164,6 +164,13 @@
         <width>24</width>
         <height>24</height>
        </size>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="rmRowBtn">
+      <property name="text">
+       <string>...</string>
       </property>
      </widget>
     </item>
@@ -213,6 +220,22 @@
       <property name="icon">
        <iconset>
         <normaloff>icons/mActionZoomIn.svg</normaloff>icons/mActionZoomIn.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="zoomOutBtn">
+      <property name="text">
+       <string>...</string>
       </property>
       <property name="iconSize">
        <size>
