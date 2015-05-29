@@ -57,7 +57,8 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.addGCPBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','gcp.svg')))
         self.cleanSelBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmGCP.svg')))
         self.zoomInBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomIn.svg')))
-
+        self.zoomOutBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomOut.svg')))
+        self.rmRowBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionDeleteSelected.svg')))
         #attacco funzioni ai bottoni
         QObject.connect(self.button_box, SIGNAL('rejected()'), self.cancelEvent)
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
@@ -229,7 +230,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         if (self.vLayer != ""):
             if (self.zoomInBtn.isChecked()):
                 self.mapPreview.unsetMapTool(self.toolZoomIn)
-                self.zoomInBtn.setCheckState(Qt.Unchecked)
+                self.zoomInBtn.setCheckable(False)
             # out click tool will emit a QgsPoint on every click
             self.clickTool1 = QgsMapToolEmitPoint(self.mapPreview)
             self.clickTool1.canvasClicked.connect(self.clickMapPreview)

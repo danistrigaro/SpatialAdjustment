@@ -57,7 +57,8 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.addGCPBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','gcp.svg')))
         self.cleanSelBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmGCP.svg')))
         self.zoomInBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomIn.svg')))
-
+        self.zoomOutBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomOut.svg')))
+        self.rmRowBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionDeleteSelected.svg')))
         #attacco funzioni ai bottoni
         QObject.connect(self.button_box, SIGNAL('rejected()'), self.cancelEvent)
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
@@ -84,9 +85,11 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.cleanSel()
     #function to remove only one row in table
     def rmRow(self):
-        self.tableWidget.removeRow(self.tableWidget.currentRow())
-        self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
-        self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
+        if (self.tableWidget.currentRow()>0):
+            self.tableWidget.removeRow(self.tableWidget.currentRow())
+            self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
+            if (len(self.markerListMP)>0):
+                self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
     #a set of map tool
     def zoomIn(self):
         if (self.zoomInBtn.isChecked()):
