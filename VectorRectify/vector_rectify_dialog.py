@@ -58,6 +58,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.cleanSelBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmGCP.svg')))
         self.zoomInBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomIn.svg')))
         self.zoomOutBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomOut.svg')))
+        self.panBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionPan.svg')))
         self.rmRowBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionDeleteSelected.svg')))
         #attacco funzioni ai bottoni
         QObject.connect(self.button_box, SIGNAL('rejected()'), self.cancelEvent)
@@ -69,12 +70,14 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         #QObject.connect(self.run, SIGNAL("clicked()"), self.runAdjust)
         QObject.connect(self.zoomInBtn, SIGNAL("clicked()"), self.zoomIn)
         QObject.connect(self.zoomOutBtn, SIGNAL("clicked()"), self.zoomOut)
+        QObject.connect(self.panBtn, SIGNAL("clicked()"), self.pan)
         # creao il mapcavas
         self.mapPreview = QgsMapCanvas(self)
         self.tabWidget.addTab(self.mapPreview, "Map Canvas")
         # set mapPreview tools
         self.toolZoomIn = QgsMapToolZoom(self.mapPreview, False)
         self.toolZoomOut = QgsMapToolZoom(self.mapPreview, True)
+        self.toolPan = QgsMapToolPan(self.mapPreview)
     #personal function
     #functions to close and cancel
     def closeEvent(self, event):
@@ -105,6 +108,13 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         else:
             print 'unset zoomOut'
             self.mapPreview.unsetMapTool(self.toolZoomOut)
+    def pan(self):
+        if (self.panBtn.isChecked()):
+            self.mapPreview.setMapTool(self.toolPan)
+            print 'set zoomOut'
+        else:
+            print 'unset zoomOut'
+            self.mapPreview.unsetMapTool(self.toolPan)
     #function to add layer
     def loadLayer(self):
         if (self.vLayer == ""):
@@ -230,9 +240,12 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
 
     def addGCP(self):
         if (self.vLayer != ""):
-            if (self.zoomInBtn.isChecked()):
-                self.mapPreview.unsetMapTool(self.toolZoomIn)
-                self.zoomInBtn.setCheckable(False)
+            self.zoomIn()
+            self.zoomInBtn.setChecked(False)
+            self.zoomOut()
+            self.zoomOutBtn.setChecked(False)
+            self.pan()
+            self.panBtn.setChecked(False)
             # out click tool will emit a QgsPoint on every click
             self.clickTool1 = QgsMapToolEmitPoint(self.mapPreview)
             self.clickTool1.canvasClicked.connect(self.clickMapPreview)
