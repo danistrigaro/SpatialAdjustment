@@ -96,6 +96,12 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
     #a set of map tool
     def zoomIn(self):
         if (self.zoomInBtn.isChecked()):
+            if (self.panBtn.isChecked()):
+                self.mapPreview.unsetMapTool(self.toolPan)
+                self.panBtn.setChecked(False)
+            elif (self.zoomOutBtn.isChecked()):
+                self.zoomOutBtn.setChecked(False)
+                self.mapPreview.setMapTool(self.toolZoomOut)
             self.mapPreview.setMapTool(self.toolZoomIn)
             print 'set zoomIn'
         else:
@@ -103,6 +109,12 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             self.mapPreview.unsetMapTool(self.toolZoomIn)
     def zoomOut(self):
         if (self.zoomOutBtn.isChecked()):
+            if (self.panBtn.isChecked()):
+                self.mapPreview.unsetMapTool(self.toolPan)
+                self.panBtn.setChecked(False)
+            elif (self.zoomInBtn.isChecked()):
+                self.zoomInBtn.setChecked(False)
+                self.mapPreview.setMapTool(self.toolZoomIn)
             self.mapPreview.setMapTool(self.toolZoomOut)
             print 'set zoomOut'
         else:
@@ -110,6 +122,12 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             self.mapPreview.unsetMapTool(self.toolZoomOut)
     def pan(self):
         if (self.panBtn.isChecked()):
+            if (self.zoomInBtn.isChecked()):
+                self.zoomInBtn.setChecked(False)
+                self.mapPreview.setMapTool(self.toolZoomIn)
+            elif (self.zoomOutBtn.isChecked()):
+                self.zoomOutBtn.setChecked(False)
+                self.mapPreview.setMapTool(self.toolZoomOut)
             self.mapPreview.setMapTool(self.toolPan)
             print 'set zoomOut'
         else:
