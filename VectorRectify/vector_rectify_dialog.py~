@@ -88,18 +88,23 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.cleanSel()
     #function to remove only one row in table
     def rmRow(self):
-        if (self.tableWidget.currentRow()>0):
-            self.tableWidget.removeRow(self.tableWidget.currentRow())
+        print self.tableWidget.currentRow()
+        if (self.tableWidget.currentRow()>=0):
             self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
-            if (len(self.markerListMP)>0):
-                self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
+            self.markerListMC.remove(self.markerListMC[self.tableWidget.currentRow()])
+            self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
+            self.markerListMP.remove(self.markerListMP[self.tableWidget.currentRow()])
+            self.tableWidget.removeRow(self.tableWidget.currentRow())
+            #if (len(self.markerListMP)>0):
+            #    self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
+            #    self.markerListMP.remove(self.markerListMP[self.tableWidget.currentRow()])
     #a set of map tool
     def zoomIn(self):
         if (self.zoomInBtn.isChecked()):
             if (self.panBtn.isChecked()):
                 self.mapPreview.unsetMapTool(self.toolPan)
                 self.panBtn.setChecked(False)
-            else if (self.zoomOutBtn.isChecked()):
+            elif (self.zoomOutBtn.isChecked()):
                 self.zoomOutBtn.setChecked(False)
                 self.mapPreview.setMapTool(self.toolZoomOut)
             self.mapPreview.setMapTool(self.toolZoomIn)
@@ -112,7 +117,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             if (self.panBtn.isChecked()):
                 self.mapPreview.unsetMapTool(self.toolPan)
                 self.panBtn.setChecked(False)
-            else if (self.zoomInBtn.isChecked()):
+            elif (self.zoomInBtn.isChecked()):
                 self.zoomInBtn.setChecked(False)
                 self.mapPreview.setMapTool(self.toolZoomIn)
             self.mapPreview.setMapTool(self.toolZoomOut)
@@ -125,7 +130,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             if (self.zoomInBtn.isChecked()):
                 self.zoomInBtn.setChecked(False)
                 self.mapPreview.setMapTool(self.toolZoomIn)
-            else if (self.zoomOutBtn.isChecked()):
+            elif (self.zoomOutBtn.isChecked()):
                 self.zoomOutBtn.setChecked(False)
                 self.mapPreview.setMapTool(self.toolZoomOut)
             self.mapPreview.setMapTool(self.toolPan)
@@ -166,59 +171,96 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         marker.setIconSize(size)
         marker.setCenter(QgsPoint(x,y))
         marker.show()
-        
-        return marker
 
-    def rmPnt(self):
-        asd = 0
+        return marker
 
     def clickMapPreview(self, point, button):
         QMessageBox.information(None, 'info', str(point.x())+', '+str(point.y()) )
         """
         prova codice per snap
+        """
 
         # trasforma in screen coordinates
         newPoint = self.mapPreview.getCoordinateTransform().transform(point)
-        # .. e in QPoint 
+        # .. e in QPoint
         pnt = QPoint(newPoint.x(),newPoint.y())
         # attiva lo snapper
         mySnapper = QgsMapCanvasSnapper(self.mapPreview)
         (reval, snapped) = mySnapper.snapToBackgroundLayers(pnt)
-        if snapped != []:
-            print "ok"
+        if (snapped != []):
+            print "ok it is snapped"
+            vertex = QgsPoint(snapped[0].snappedVertex.x(), snapped[0].snappedVertex.y())
+            markerMapPreview = self.addPnt(self.mapPreview,vertex)
+            self.markerListMP.append(markerMapPreview)
+            self.srcList.append([vertex.x(),vertex.y()])
+            nRow = self.tableWidget.rowCount()
+            self.tableWidget.insertRow(nRow)
+            checkItem = QTableWidgetItem()
+            checkItem.setFlags(Qt.ItemIsUserCheckable |
+                               Qt.ItemIsEnabled)
+            checkItem.setCheckState(Qt.Checked)
+            self.tableWidget.setItem(nRow,0, checkItem)
+            self.tableWidget.setItem(nRow,1, QTableWidgetItem(str(vertex.x())))
+            self.tableWidget.setItem(nRow,2, QTableWidgetItem(str(vertex.y())))
+
+
+            self.clickTool1.canvasClicked.disconnect()
+            self.mapPreview.unsetMapTool(self.clickTool1)
+            self.clickTool2 = QgsMapToolEmitPoint(self.canvas)
+            self.canvas.setMapTool(self.clickTool2)
+            self.clickTool2.canvasClicked.connect(self.clickMapCanvas)
         else:
-            print 'no'
-        """
-        markerMapPreview = self.addPnt(self.mapPreview,point)
-        self.markerListMP.append(markerMapPreview)
-        self.srcList.append([point.x(),point.y()])
-        nRow = self.tableWidget.rowCount()
-        self.tableWidget.insertRow(nRow)
-        checkItem = QTableWidgetItem()
-        checkItem.setFlags(Qt.ItemIsUserCheckable |
-                           Qt.ItemIsEnabled)
-        checkItem.setCheckState(Qt.Checked)
-        self.tableWidget.setItem(nRow,0, checkItem)        
-        self.tableWidget.setItem(nRow,1, QTableWidgetItem(str(point.x())))        
-        self.tableWidget.setItem(nRow,2, QTableWidgetItem(str(point.y())))
+            print "no it is not snapped"
+            markerMapPreview = self.addPnt(self.mapPreview,point)
+            self.markerListMP.append(markerMapPreview)
+            self.srcList.append([point.x(),point.y()])
+            nRow = self.tableWidget.rowCount()
+            self.tableWidget.insertRow(nRow)
+            checkItem = QTableWidgetItem()
+            checkItem.setFlags(Qt.ItemIsUserCheckable |
+                               Qt.ItemIsEnabled)
+            checkItem.setCheckState(Qt.Checked)
+            self.tableWidget.setItem(nRow,0, checkItem)
+            self.tableWidget.setItem(nRow,1, QTableWidgetItem(str(point.x())))
+            self.tableWidget.setItem(nRow,2, QTableWidgetItem(str(point.y())))
 
-
-        self.clickTool1.canvasClicked.disconnect()
-        self.mapPreview.unsetMapTool(self.clickTool1)
-        self.clickTool2 = QgsMapToolEmitPoint(self.canvas)
-        self.canvas.setMapTool(self.clickTool2)
-        self.clickTool2.canvasClicked.connect(self.clickMapCanvas)
+            self.clickTool1.canvasClicked.disconnect()
+            self.mapPreview.unsetMapTool(self.clickTool1)
+            self.clickTool2 = QgsMapToolEmitPoint(self.canvas)
+            self.canvas.setMapTool(self.clickTool2)
+            self.clickTool2.canvasClicked.connect(self.clickMapCanvas)
 
     def clickMapCanvas(self, point, button):
         QMessageBox.information(None, 'info', str(point.x())+', '+str(point.y()))
-        markerMapCanvas = self.addPnt(self.canvas,point)
-        self.markerListMC.append(markerMapCanvas)
-        self.dstList.append([point.x(),point.y()])
-        self.clickTool2.canvasClicked.disconnect()
-        self.canvas.unsetMapTool(self.clickTool2)
-        nRow = self.tableWidget.rowCount()
-        self.tableWidget.setItem(nRow-1,3, QTableWidgetItem(str(point.x())))        
-        self.tableWidget.setItem(nRow-1,4, QTableWidgetItem(str(point.y())))
+
+        # trasforma in screen coordinates
+        newPoint = self.mapPreview.getCoordinateTransform().transform(point)
+        # .. e in QPoint
+        pnt = QPoint(newPoint.x(),newPoint.y())
+        # attiva lo snapper
+        mySnapper = QgsMapCanvasSnapper(self.mapPreview)
+        (reval, snapped) = mySnapper.snapToBackgroundLayers(pnt)
+        if (snapped != []):
+            print "ok it is snapped"
+            vertex = QgsPoint(snapped[0].snappedVertex.x(), snapped[0].snappedVertex.y())
+            markerMapCanvas = self.addPnt(self.canvas,vertex)
+            self.markerListMC.append(markerMapCanvas)
+            self.dstList.append([vertex.x(),vertex.y()])
+            self.clickTool2.canvasClicked.disconnect()
+            self.canvas.unsetMapTool(self.clickTool2)
+            nRow = self.tableWidget.rowCount()
+            self.tableWidget.setItem(nRow-1,3, QTableWidgetItem(str(vertex.x())))
+            self.tableWidget.setItem(nRow-1,4, QTableWidgetItem(str(vertex.y())))
+        else:
+            print "no it is not snapped"
+            markerMapCanvas = self.addPnt(self.canvas,point)
+            self.markerListMC.append(markerMapCanvas)
+            self.dstList.append([point.x(),point.y()])
+            self.clickTool2.canvasClicked.disconnect()
+            self.canvas.unsetMapTool(self.clickTool2)
+            nRow = self.tableWidget.rowCount()
+            self.tableWidget.setItem(nRow-1,3, QTableWidgetItem(str(point.x())))
+            self.tableWidget.setItem(nRow-1,4, QTableWidgetItem(str(point.y())))
 
     def cleanSel(self):
         """
@@ -299,8 +341,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 self.canvas.zoomToFullExtent()
                 os.remove(filepath)
             else:
-                QMessageBox.information(None, 'info', "Check at least 4 ground control points" )  
+                QMessageBox.information(None, 'info', "Check at least 4 ground control points" )
         else:
             QMessageBox.information(None, 'info', "Add at least 4 ground control points" )
         #
-
