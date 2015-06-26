@@ -30,6 +30,7 @@ from qgis.core import *
 import qgis.utils
 import processing
 import csv
+from time import gmtime, strftime
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'vector_rectify_dialog_base.ui'))
@@ -60,7 +61,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.zoomOutBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomOut.svg')))
         self.panBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionPan.svg')))
         self.rmRowBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionDeleteSelected.svg')))
-        self.zoomToLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionDeleteSelected.svg')))
+        self.zoomToLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomToLayer.svg')))
         #attacco funzioni ai bottoni
         QObject.connect(self.button_box, SIGNAL('rejected()'), self.cancelEvent)
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
@@ -81,13 +82,21 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.toolZoomOut = QgsMapToolZoom(self.mapPreview, True)
         self.toolPan = QgsMapToolPan(self.mapPreview)
     #personal function
+    def addTextToBrowser(self, text):
+        if (self.textBrowser.selectAll()==''):
+            self.textBrowser.setText(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "\n" + text)
+        else:
+            self.textBrowser.append(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "\n" + text)
+
     #functions to close and cancel
     def closeEvent(self, event):
         self.removeLayer()
         self.cleanSel()
+        self.textBrowser.clear()
     def cancelEvent(self):
         self.removeLayer()
         self.cleanSel()
+        self.textBrowser.clear()
     #function to remove only one row in table
     def rmRow(self):
         print self.tableWidget.currentRow()
@@ -156,9 +165,11 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 layerToSet.append(QgsMapCanvasLayer(self.vLayer, True, False))
                 self.mapPreview.setLayerSet(layerToSet)
                 self.mapPreview.zoomToFullExtent()
+                self.addTextToBrowser('Layer loaded')
                 # azzera la tabella dei CP
                 #self.on_pushButton_clear_pressed()
         else:
+            self.addTextToBrowser("Can't load the layer")
             QMessageBox.information(None, 'info', "Please remove the layer that is already present" )
     #function to remove layer
     def removeLayer(self):
@@ -166,6 +177,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             QgsMapLayerRegistry.instance().removeMapLayer(self.vLayer.id())
             self.mapPreview.refresh()
             self.vLayer = ""
+            self.addTextToBrowser('Layer removed')
     #functions to add point
     def addPnt(self,canvas,pnt):
         color = QColor(250,150,0)
@@ -176,11 +188,10 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         marker.setIconSize(size)
         marker.setCenter(QgsPoint(x,y))
         marker.show()
-
         return marker
 
     def clickMapPreview(self, point, button):
-        QMessageBox.information(None, 'info', str(point.x())+', '+str(point.y()) )
+      
         """
         prova codice per snap
         """
@@ -195,7 +206,6 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         mySnapper = QgsMapCanvasSnapper(self.mapPreview)
         (reval, snapped) = mySnapper.snapToBackgroundLayers(pnt)
         if (snapped != []):
-            print "ok it is snapped"
             vertex = QgsPoint(snapped[0].snappedVertex.x(), snapped[0].snappedVertex.y())
             markerMapPreview = self.addPnt(self.mapPreview,vertex)
             self.markerListMP.append(markerMapPreview)
@@ -209,15 +219,13 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             self.tableWidget.setItem(nRow,0, checkItem)
             self.tableWidget.setItem(nRow,1, QTableWidgetItem(str(vertex.x())))
             self.tableWidget.setItem(nRow,2, QTableWidgetItem(str(vertex.y())))
-
-
             self.clickTool1.canvasClicked.disconnect()
             self.mapPreview.unsetMapTool(self.clickTool1)
             self.clickTool2 = QgsMapToolEmitPoint(self.canvas)
             self.canvas.setMapTool(self.clickTool2)
             self.clickTool2.canvasClicked.connect(self.clickMapCanvas)
+            self.addTextToBrowser('Source GCP added (snapped): ' + str(point.x()) + ", " + str(point.y()))
         else:
-            print "no it is not snapped"
             markerMapPreview = self.addPnt(self.mapPreview,point)
             self.markerListMP.append(markerMapPreview)
             self.srcList.append([point.x(),point.y()])
@@ -236,9 +244,9 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             self.clickTool2 = QgsMapToolEmitPoint(self.canvas)
             self.canvas.setMapTool(self.clickTool2)
             self.clickTool2.canvasClicked.connect(self.clickMapCanvas)
+            self.addTextToBrowser('Source GCP added (not snapped): ' + str(point.x()) + ", " + str(point.y()))
 
     def clickMapCanvas(self, point, button):
-        QMessageBox.information(None, 'info', str(point.x())+', '+str(point.y()))
 
         # trasforma in screen coordinates
         newPoint = self.mapPreview.getCoordinateTransform().transform(point)
@@ -248,7 +256,6 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         mySnapper = QgsMapCanvasSnapper(self.mapPreview)
         (reval, snapped) = mySnapper.snapToBackgroundLayers(pnt)
         if (snapped != []):
-            print "ok it is snapped"
             vertex = QgsPoint(snapped[0].snappedVertex.x(), snapped[0].snappedVertex.y())
             markerMapCanvas = self.addPnt(self.canvas,vertex)
             self.markerListMC.append(markerMapCanvas)
@@ -258,8 +265,8 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             nRow = self.tableWidget.rowCount()
             self.tableWidget.setItem(nRow-1,3, QTableWidgetItem(str(vertex.x())))
             self.tableWidget.setItem(nRow-1,4, QTableWidgetItem(str(vertex.y())))
+            self.addTextToBrowser('Dest GCP added (snapped): ' + str(point.x()) + ", " + str(point.y()))
         else:
-            print "no it is not snapped"
             markerMapCanvas = self.addPnt(self.canvas,point)
             self.markerListMC.append(markerMapCanvas)
             self.dstList.append([point.x(),point.y()])
@@ -268,6 +275,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             nRow = self.tableWidget.rowCount()
             self.tableWidget.setItem(nRow-1,3, QTableWidgetItem(str(point.x())))
             self.tableWidget.setItem(nRow-1,4, QTableWidgetItem(str(point.y())))
+            self.addTextToBrowser('Dest GCP added (not snapped): ' + str(point.x()) + ", " + str(point.y()))
 
     def cleanSel(self):
         """
@@ -347,6 +355,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 QgsMapLayerRegistry.instance().addMapLayers([self.vLayerOut])
                 self.canvas.zoomToFullExtent()
                 os.remove(filepath)
+                self.addTextToBrowser('Process finished!')
             else:
                 QMessageBox.information(None, 'info', "Check at least 4 ground control points" )
         else:
