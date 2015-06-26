@@ -71,6 +71,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         QObject.connect(self.zoomInBtn, SIGNAL("clicked()"), self.zoomIn)
         QObject.connect(self.zoomOutBtn, SIGNAL("clicked()"), self.zoomOut)
         QObject.connect(self.panBtn, SIGNAL("clicked()"), self.pan)
+        QObject.connect(self.zoomToLayerBtn, SIGNAL('clicked()'), self.zoomToLayer)
         # creao il mapcavas
         self.mapPreview = QgsMapCanvas(self)
         self.tabWidget.addTab(self.mapPreview, "Map Canvas")
@@ -95,9 +96,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
             self.markerListMP.remove(self.markerListMP[self.tableWidget.currentRow()])
             self.tableWidget.removeRow(self.tableWidget.currentRow())
-            #if (len(self.markerListMP)>0):
-            #    self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
-            #    self.markerListMP.remove(self.markerListMP[self.tableWidget.currentRow()])
+
     #a set of map tool
     def zoomIn(self):
         if (self.zoomInBtn.isChecked()):
@@ -138,6 +137,11 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         else:
             print 'unset zoomOut'
             self.mapPreview.unsetMapTool(self.toolPan)
+    def zoomToLayer(self):
+        if (self.vLayer != ""):
+            #self.mapPreview.setLayerSet(layerToSet)
+            self.mapPreview.zoomToFullExtent()
+
     #function to add layer
     def loadLayer(self):
         if (self.vLayer == ""):

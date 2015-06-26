@@ -13,7 +13,7 @@ name=Vector Rectify
 qgisMinimumVersion=2.0
 description=A visual tool to georeferencing vector layers
 version=0.2
-author=Giuliano Curti, Daniele Strigaro
+author=Giuliano Curti, Daniele Strigaro, Luca Mandolesi, Giuseppe Patti
 email=giulianc51@gmail.com, daniele.strigaro@gmail.com
 
 # end of mandatory metadata
@@ -26,9 +26,9 @@ email=giulianc51@gmail.com, daniele.strigaro@gmail.com
 # tags are comma separated with spaces allowed
 tags=vector, georeferencer
 
-homepage= https://github.com/danistrigaro/VectorRectify
-tracker=https://github.com/danistrigaro/VectorRectify/issues
-repository=https://github.com/danistrigaro/VectorRectify
+homepage= https://github.com/danistrigaro/SpatialAdjustment
+tracker=https://github.com/danistrigaro/SpatialAdjustment/issues
+repository=https://github.com/danistrigaro/SpatialAdjustment
 icon=icon.png
 # experimental flag
 experimental=True

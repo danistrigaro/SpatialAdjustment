@@ -13,7 +13,7 @@ name=Vector Rectify
 qgisMinimumVersion=2.0
 description=A visual tool to georeferencing vector layers
 version=0.2
-author=Giuliano Curti, Daniele Strigaro
+author=Giuliano Curti, Daniele Strigaro, Luca Mandolesi, Giuseppe Patti
 email=giulianc51@gmail.com, daniele.strigaro@gmail.com
 
 # end of mandatory metadata

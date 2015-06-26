@@ -51,7 +51,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         self.canvas = iface.mapCanvas()
-        #setto icnone
+        #setto icone
         self.loadLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','addVect.svg')))
         self.removeLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','rmVect.svg')))
         self.addGCPBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','gcp.svg')))
@@ -60,6 +60,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.zoomOutBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomOut.svg')))
         self.panBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionPan.svg')))
         self.rmRowBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionDeleteSelected.svg')))
+        self.zoomToLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionDeleteSelected.svg')))
         #attacco funzioni ai bottoni
         QObject.connect(self.button_box, SIGNAL('rejected()'), self.cancelEvent)
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
@@ -71,6 +72,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         QObject.connect(self.zoomInBtn, SIGNAL("clicked()"), self.zoomIn)
         QObject.connect(self.zoomOutBtn, SIGNAL("clicked()"), self.zoomOut)
         QObject.connect(self.panBtn, SIGNAL("clicked()"), self.pan)
+        QObject.connect(self.zoomToLayerBtn, SIGNAL('clicked()'), self.zoomToLayer)
         # creao il mapcavas
         self.mapPreview = QgsMapCanvas(self)
         self.tabWidget.addTab(self.mapPreview, "Map Canvas")
@@ -136,6 +138,11 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         else:
             print 'unset zoomOut'
             self.mapPreview.unsetMapTool(self.toolPan)
+    def zoomToLayer(self):
+        if (self.vLayer != ""):
+            #self.mapPreview.setLayerSet(layerToSet)
+            self.mapPreview.zoomToFullExtent()
+
     #function to add layer
     def loadLayer(self):
         if (self.vLayer == ""):
@@ -181,7 +188,9 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         # trasforma in screen coordinates
         newPoint = self.mapPreview.getCoordinateTransform().transform(point)
         # .. e in QPoint
-        pnt = QPoint(newPoint.x(),newPoint.y())
+        #print point.x(), point.y()
+        #print newPoint.x(), newPoint.y()
+        pnt = QPoint(point.x(), point.y())
         # attiva lo snapper
         mySnapper = QgsMapCanvasSnapper(self.mapPreview)
         (reval, snapped) = mySnapper.snapToBackgroundLayers(pnt)
