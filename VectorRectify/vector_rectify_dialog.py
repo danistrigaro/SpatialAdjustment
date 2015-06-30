@@ -7,8 +7,8 @@
                               -------------------
         begin                : 2015-05-21
         git sha              : $Format:%H$
-        copyright            : (C) 2015 by Giuliano Curti, Daniele Strigaro
-        email                : giulianc51@gmail.com, daniele.strigaro@gmail.com
+        copyright            : (C) 2015 by Daniele Strigaro, Giuliano Curti
+        email                : daniele.strigaro@gmail.com, giulianc51@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -99,12 +99,15 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.textBrowser.clear()
     #function to remove only one row in table
     def rmRow(self):
-        print self.tableWidget.currentRow()
+        #print self.tableWidget.currentRow()
         if (self.tableWidget.currentRow()>=0):
-            self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
-            self.markerListMC.remove(self.markerListMC[self.tableWidget.currentRow()])
             self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
             self.markerListMP.remove(self.markerListMP[self.tableWidget.currentRow()])
+            try:
+                self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
+                self.markerListMC.remove(self.markerListMC[self.tableWidget.currentRow()])
+            except:
+                print 'no GCP on map canvas to remove'
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
     #a set of map tool

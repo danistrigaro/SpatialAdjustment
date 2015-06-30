@@ -7,8 +7,8 @@
                               -------------------
         begin                : 2015-05-21
         git sha              : $Format:%H$
-        copyright            : (C) 2015 by Giuliano Curti, Daniele Strigaro
-        email                : giulianc51@gmail.com, daniele.strigaro@gmail.com
+        copyright            : (C) 2015 by Daniele Strigaro, Giuliano Curti
+        email                : daniele.strigaro@gmail.com, giulianc51@gmail.com
  ***************************************************************************/
 
 /***************************************************************************

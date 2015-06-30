@@ -197,5 +197,5 @@ class VectorRectify:
             # substitute with your code.
             self.dlg.runAdjust()
             pass
-        else:
-            qgis.utils.reloadPlugin('VectorRectify')
+#        else:
+#            qgis.utils.reloadPlugin('VectorRectify')

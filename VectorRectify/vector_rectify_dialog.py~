@@ -84,7 +84,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
     #personal function
     def addTextToBrowser(self, text):
         if (self.textBrowser.selectAll()==''):
-            self.textBrowser.setText("<html><b>" + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "</b</html>" + "\n" + text)
+            self.textBrowser.setText(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "\n" + text)
         else:
             self.textBrowser.append(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "\n" + text)
 
@@ -99,12 +99,15 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.textBrowser.clear()
     #function to remove only one row in table
     def rmRow(self):
-        print self.tableWidget.currentRow()
+        #print self.tableWidget.currentRow()
         if (self.tableWidget.currentRow()>=0):
-            self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
-            self.markerListMC.remove(self.markerListMC[self.tableWidget.currentRow()])
             self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
             self.markerListMP.remove(self.markerListMP[self.tableWidget.currentRow()])
+            try:
+                self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
+                self.markerListMC.remove(self.markerListMC[self.tableWidget.currentRow()])
+            except:
+                print 'no GCP on map canvas to remove'
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
     #a set of map tool
