@@ -137,6 +137,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QToolButton" name="panBtn">
+       <property name="toolTip">
+        <string>Pan</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -153,6 +156,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="zoomInBtn">
+       <property name="toolTip">
+        <string>Zoom in</string>
+       </property>
        <property name="text">
         <string>Zoom in</string>
        </property>
@@ -173,6 +179,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="zoomOutBtn">
+       <property name="toolTip">
+        <string>Zoom out</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -189,6 +198,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="zoomToLayerBtn">
+       <property name="toolTip">
+        <string>Zoom to layer</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -227,6 +239,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QToolButton" name="loadLayerBtn">
+       <property name="toolTip">
+        <string>Add vector</string>
+       </property>
        <property name="text">
         <string>Add layer</string>
        </property>
@@ -244,6 +259,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="removeLayerBtn">
+       <property name="toolTip">
+        <string>Remove vector</string>
+       </property>
        <property name="text">
         <string>Remove layer</string>
        </property>
@@ -299,6 +317,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QToolButton" name="addGCPBtn">
+       <property name="toolTip">
+        <string>Add GCP</string>
+       </property>
        <property name="text">
         <string>Add GCP</string>
        </property>
@@ -316,6 +337,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="rmRowBtn">
+       <property name="toolTip">
+        <string>Remove a GCP</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -329,6 +353,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="cleanSelBtn">
+       <property name="toolTip">
+        <string>Remove all</string>
+       </property>
        <property name="text">
         <string>Remove GCP</string>
        </property>
