@@ -340,7 +340,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 basepath = os.path.dirname(__file__)
                 idCsv = 'sad'
                 filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
-                with open(filepath, "w") as gcpCSV:
+                with open(filepath, "r+") as gcpCSV:
                     writer = csv.writer(gcpCSV, delimiter=' ')
                     i = 0
                     for r in data:
@@ -357,7 +357,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 curCrs = render.destinationCrs()
                 QgsMapLayerRegistry.instance().addMapLayers([self.vLayerOut])
                 self.canvas.zoomToFullExtent()
-                os.remove(filepath)
+                #os.remove(filepath)
                 self.addTextToBrowser('Process finished!')
             else:
                 QMessageBox.information(None, 'info', "Check at least 4 ground control points" )
