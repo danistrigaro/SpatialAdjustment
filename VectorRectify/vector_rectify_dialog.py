@@ -64,6 +64,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.zoomToLayerBtn.setIcon(QIcon(os.path.join(os.path.dirname(__file__),'icons','mActionZoomToLayer.svg')))
         #attacco funzioni ai bottoni
         QObject.connect(self.button_box, SIGNAL('rejected()'), self.cancelEvent)
+        QObject.connect(self.button_box, SIGNAL('accepted()'), self.runAdjust)
         QObject.connect(self.loadLayerBtn, SIGNAL("clicked()"), self.loadLayer)
         QObject.connect(self.removeLayerBtn, SIGNAL("clicked()"), self.removeLayer)
         QObject.connect(self.addGCPBtn, SIGNAL("clicked()"), self.addGCP)
@@ -106,9 +107,10 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             try:
                 self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
                 self.markerListMC.remove(self.markerListMC[self.tableWidget.currentRow()])
-            except:
                 # -- print 'no GCP on map canvas to remove'
-            self.tableWidget.removeRow(self.tableWidget.currentRow())
+                self.tableWidget.removeRow(self.tableWidget.currentRow())
+            except:
+                self.tableWidget.removeRow(self.tableWidget.currentRow())
 
     #a set of map tool
     def zoomIn(self):

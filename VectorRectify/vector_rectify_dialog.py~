@@ -99,15 +99,14 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         self.textBrowser.clear()
     #function to remove only one row in table
     def rmRow(self):
-        #print self.tableWidget.currentRow()
+        # -- print self.tableWidget.currentRow()
         if (self.tableWidget.currentRow()>=0):
             self.mapPreview.scene().removeItem(self.markerListMP[self.tableWidget.currentRow()])
             self.markerListMP.remove(self.markerListMP[self.tableWidget.currentRow()])
             try:
                 self.canvas.scene().removeItem(self.markerListMC[self.tableWidget.currentRow()])
                 self.markerListMC.remove(self.markerListMC[self.tableWidget.currentRow()])
-            except:
-                print 'no GCP on map canvas to remove'
+                # -- print 'no GCP on map canvas to remove'
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
     #a set of map tool
@@ -120,9 +119,9 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 self.zoomOutBtn.setChecked(False)
                 self.mapPreview.setMapTool(self.toolZoomOut)
             self.mapPreview.setMapTool(self.toolZoomIn)
-            print 'set zoomIn'
+            # -- print 'set zoomIn'
         else:
-            print 'unset zoomIn'
+            # -- print 'unset zoomIn'
             self.mapPreview.unsetMapTool(self.toolZoomIn)
     def zoomOut(self):
         if (self.zoomOutBtn.isChecked()):
@@ -133,9 +132,9 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 self.zoomInBtn.setChecked(False)
                 self.mapPreview.setMapTool(self.toolZoomIn)
             self.mapPreview.setMapTool(self.toolZoomOut)
-            print 'set zoomOut'
+            # -- print 'set zoomOut'
         else:
-            print 'unset zoomOut'
+            # -- print 'unset zoomOut'
             self.mapPreview.unsetMapTool(self.toolZoomOut)
     def pan(self):
         if (self.panBtn.isChecked()):
@@ -146,9 +145,9 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 self.zoomOutBtn.setChecked(False)
                 self.mapPreview.setMapTool(self.toolZoomOut)
             self.mapPreview.setMapTool(self.toolPan)
-            print 'set zoomOut'
+            # -- print 'set zoomOut'
         else:
-            print 'unset zoomOut'
+            # -- print 'unset zoomOut'
             self.mapPreview.unsetMapTool(self.toolPan)
     def zoomToLayer(self):
         if (self.vLayer != ""):
@@ -162,7 +161,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             if self.pname:
                 fname = self.pname.split('/')
                 self.vLayer = QgsVectorLayer(self.pname, fname[-1] + '_adjust', "ogr")
-                print "aperto layer",fname[-1]
+                # -- print "aperto layer",fname[-1]
                 layerToSet = []
                 QgsMapLayerRegistry.instance().addMapLayers([self.vLayer], False)
                 layerToSet.append(QgsMapCanvasLayer(self.vLayer, True, False))
@@ -202,8 +201,8 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         # trasforma in screen coordinates
         newPoint = self.mapPreview.getCoordinateTransform().transform(point)
         # .. e in QPoint
-        #print point.x(), point.y()
-        #print newPoint.x(), newPoint.y()
+        # -- print point.x(), point.y()
+        # -- print newPoint.x(), newPoint.y()
         pnt = QPoint(point.x(), point.y())
         # attiva lo snapper
         mySnapper = QgsMapCanvasSnapper(self.mapPreview)
@@ -287,7 +286,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
         # elimina i marcatori
         for m in self.markerListMC:
             self.canvas.scene().removeItem(m)
-            print m
+            # -- print m
         self.markerListMC = []
         for m in self.markerListMP:
             self.mapPreview.scene().removeItem(m)
@@ -311,7 +310,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
             if (self.tableWidget.item(r,0).checkState() == Qt.Checked):
                 for c in range(nCol-1):
                     item = self.tableWidget.item(r,c+1)
-                    print item.text()
+                    # -- print item.text()
                     riga.append(item.text())
                 data.append(riga)
         return data
@@ -349,9 +348,9 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 gcpCSV.close()
                 #for m in gcpList:
                 #    csv.writerow()
-                print self.pname
+                # -- print self.pname
                 out = processing.runalg('grass:v.transform.pointsfile',self.pname,filepath,None,None,None,None,0,None)
-                print str(out['output'])
+                # -- print str(out['output'])
                 self.vLayerOut = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
                 render = self.canvas.mapRenderer()
                 curCrs = render.destinationCrs()
