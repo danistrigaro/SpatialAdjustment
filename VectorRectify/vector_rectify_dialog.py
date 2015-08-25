@@ -342,7 +342,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 basepath = os.path.dirname(__file__)
                 idCsv = 'sad'
                 filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
-                with open(filepath, "r+") as gcpCSV:
+                with open(filepath, "w+") as gcpCSV:
                     writer = csv.writer(gcpCSV, delimiter=' ')
                     i = 0
                     for r in data:
@@ -354,7 +354,10 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 # -- print self.pname
                 out = processing.runalg('grass:v.transform.pointsfile',self.pname,filepath,None,None,None,None,0,None)
                 # -- print str(out['output'])
+                idCrs = self.canvas.mapRenderer().destinationCrs().authid()
+                idEPSG = int(idCrs.split(':')[1])
                 self.vLayerOut = QgsVectorLayer(str(out['output']), 'output_spatialadjustment.shp', "ogr")
+                self.vLayerOut.setCrs(QgsCoordinateReferenceSystem(idEPSG, QgsCoordinateReferenceSystem.EpsgCrsId))
                 render = self.canvas.mapRenderer()
                 curCrs = render.destinationCrs()
                 QgsMapLayerRegistry.instance().addMapLayers([self.vLayerOut])
