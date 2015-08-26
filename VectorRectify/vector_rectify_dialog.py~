@@ -342,7 +342,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 basepath = os.path.dirname(__file__)
                 idCsv = 'sad'
                 filepath = os.path.abspath(os.path.join(basepath, idCsv+".csv"))
-                with open(filepath, "r+") as gcpCSV:
+                with open(filepath, "w+") as gcpCSV:
                     writer = csv.writer(gcpCSV, delimiter=' ')
                     i = 0
                     for r in data:

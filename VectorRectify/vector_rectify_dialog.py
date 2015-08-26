@@ -362,7 +362,7 @@ class VectorRectifyDialog(QtGui.QDialog, FORM_CLASS):
                 curCrs = render.destinationCrs()
                 QgsMapLayerRegistry.instance().addMapLayers([self.vLayerOut])
                 self.canvas.zoomToFullExtent()
-                #os.remove(filepath)
+                os.remove(filepath)
                 self.addTextToBrowser('Process finished!')
             else:
                 QMessageBox.information(None, 'info', "Check at least 4 ground control points" )

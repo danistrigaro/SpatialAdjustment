@@ -172,7 +172,7 @@ class VectorRectify:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&Vector Rectify'),
+                self.tr(u'&Spatial Adjustment'),
                 action)
             self.iface.removeToolBarIcon(action)
         # remove the toolbar
